@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const helper = require("./apis/helper");
 const pokemon = require("./apis/pokemon");
@@ -8,9 +9,11 @@ const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 
+console.log(process.env.MONGODB_URI);
+
 console.log("Connecting to MongoDB...");
-const mongoDBEndpoint =
-  "mongodb+srv://lingyunx:mymongodb123456@cs5610-project3.tvq48.mongodb.net/?retryWrites=true&w=majority&appName=CS5610-Project3";
+const mongoDBEndpoint = process.env.MONGODB_URI;
+console.log(mongoDBEndpoint);
 mongoose.connect(mongoDBEndpoint, { useNewUrlParser: true });
 
 const db = mongoose.connection;

@@ -23,7 +23,9 @@
     "url": "https://github.com/chloelingyunxiao/Lingyun-XiaoXukun-Zhang-cs5610-project3-twitter/issues"
   },
   "homepage": "https://github.com/chloelingyunxiao/Lingyun-XiaoXukun-Zhang-cs5610-project3-twitter#readme",
-  "dependencies": {},
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  },
   "devDependencies": {
     "concurrently": "^8.0.1"
   }

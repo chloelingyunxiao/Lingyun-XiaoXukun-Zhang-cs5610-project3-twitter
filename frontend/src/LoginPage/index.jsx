@@ -1,39 +1,30 @@
-import React from "react";
-import "./style.css";
-import axios from "axios";
-import { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./style.css";
 
 const LoginPage = () => {
+  const { login, error } = useContext(UserContext);
+  const { isLoggedIn } = useContext(UserContext);
   const [usernameInput, setUsernameInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-  const [error, setErrorValue] = useState("");
   const navigate = useNavigate();
-
-  const setUsername = (event) => {
-    const username = event.target.value;
-    setUsernameInput(username);
-  };
-
-  const setPassword = (event) => {
-    const pswd = event.target.value;
-    setPasswordInput(pswd);
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    if (!usernameInput || !passwordInput) {
+      setError("Please fill in both fields");
+      return;
+    }
     try {
-      const response = await axios.post("/api/users/login", {
-        username: usernameInput,
-        password: passwordInput,
-      });
-      // console.log("login successful");
-      if (response.status === 200) {
+      const loginSuccess = await login(usernameInput, passwordInput);
+      if (loginSuccess) {
         navigate("/talktown");
       }
     } catch (e) {
-      setErrorValue(e.response ? e.response.data : "Login failed");
+      console.log(e);
+      alert("Login failed. Please check your credentials.");
     }
   };
 
@@ -47,7 +38,7 @@ const LoginPage = () => {
             <input
               type="text"
               value={usernameInput}
-              onChange={setUsername}
+              onChange={(e) => setUsernameInput(e.target.value)}
               placeholder="Enter your username"
             />
           </div>
@@ -56,7 +47,7 @@ const LoginPage = () => {
             <input
               type="password"
               value={passwordInput}
-              onChange={setPassword}
+              onChange={(e) => setPasswordInput(e.target.value)}
               placeholder="Enter your password"
             />
           </div>

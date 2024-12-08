@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./style.css";
 
 const RegisterPage = () => {
+  const { login, error } = useContext(UserContext);
   const [usernameInput, setUsernameInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState("");
-  const [errorValue, setErrorValue] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async (event) => {
     event.preventDefault();
 
     if (passwordInput !== confirmPasswordInput) {
-      setErrorValue("Passwords do not match");
+      alert("Passwords do not match");
       return;
     }
 
@@ -24,11 +25,11 @@ const RegisterPage = () => {
         password: passwordInput,
       });
       if (response.status === 200) {
+        await login(usernameInput, passwordInput);
         navigate("/talktown");
       }
-      console.log("Registration successful");
     } catch (e) {
-      setErrorValue(e.response ? e.response.data : "Registration failed");
+      console.log("Registration failed", e);
     }
   };
 
@@ -64,7 +65,7 @@ const RegisterPage = () => {
               onChange={(e) => setConfirmPasswordInput(e.target.value)}
             />
           </div>
-          {errorValue && <p className="error-message">{errorValue}</p>}{" "}
+          {error && <p className="error-message">{error}</p>}{" "}
           <button type="submit" className="signup-button">
             Sign Up
           </button>

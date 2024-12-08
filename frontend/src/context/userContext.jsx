@@ -1,4 +1,5 @@
-import React, { createContext, useState, useEffect } from "react";
+import React from "react";
+import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
 const UserContext = createContext();
@@ -14,7 +15,6 @@ const UserProvider = ({ children }) => {
         const response = await axios.get("/api/users/isLoggedIn");
         if (response.data.username) {
           setCurrentUser(response.data.username);
-          setIsLoggedIn(true);
         }
       } catch (e) {
         console.error("Error checking login status", e);
@@ -23,6 +23,7 @@ const UserProvider = ({ children }) => {
     checkLoggedIn();
   }, []);
 
+  // return a boolean indicating whether the user is logged in
   const login = async (username, password) => {
     try {
       const response = await axios.post("/api/users/login", {
@@ -31,11 +32,15 @@ const UserProvider = ({ children }) => {
       });
       if (response.status === 200) {
         setCurrentUser(username);
-        setIsLoggedIn(true);
         setError("");
+        console.log("Login successful", response.data);
+        setIsLoggedIn(true);
+
+        return true;
       }
     } catch (e) {
       setError("Login failed");
+      return false;
     }
   };
 
@@ -51,15 +56,7 @@ const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{
-        currentUser,
-        isLoggedIn,
-        setIsLoggedIn,
-        setCurrentUser,
-        login,
-        logout,
-        error,
-      }}
+      value={{ currentUser, login, logout, error, isLoggedIn }}
     >
       {children}
     </UserContext.Provider>

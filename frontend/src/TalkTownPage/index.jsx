@@ -53,7 +53,7 @@ const TalkTownPage = () => {
 
   return (
     <div>
-      <NavBar isLoggedIn={true} />
+      <NavBar />
       {orderedPosts.map((post, index) => (
         <Post key={index} post={post} />
       ))}

@@ -6,7 +6,7 @@ const UserProfile = () => {
   return (
     <div>
       <h1>User Profile: {username}</h1>
-      {/* Fetch and display user posts here */}
+      {/* Fetch and display user posts*/}
     </div>
   );
 };

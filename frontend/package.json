@@ -6,7 +6,7 @@
   "proxy": "http://localhost:8000/",
   "scripts": {
     "dev": "npx vite",
-    "build": "npx vite build",
+    "build": "npx --no-install vite build",
     "preview": "npx vite preview"
   },
   "dependencies": {

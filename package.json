@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"npm run dev -w backend\" \"npm run dev -w frontend\"",
-    "build": "npm run build -ws --if-present",
+    "build": "npm run build --workspace frontend",
     "prod": "npm run start -w backend",
     "install-all": "npm install --workspace frontend && npm install --workspace backend"
   },

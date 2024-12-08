@@ -1,2 +1,16 @@
 # Lingyun-XiaoXukun-Zhang-cs5610-project3-twitter
+
 CS5610 project3
+
+1. add .env file in backend/, renferencing .env.example
+
+2. run frontend server
+   cd frontend
+   npm run build
+
+3. run backend
+   cd backend
+   npm run start
+
+4. Render
+   https://lingyun-xiaoxukun-zhang-cs5610-project3.onrender.com

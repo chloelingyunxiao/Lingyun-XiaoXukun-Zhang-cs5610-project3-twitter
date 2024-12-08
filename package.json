@@ -3,16 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "workspaces": [
-    "backend",
-    "frontend"
-  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"npm run dev -w backend\" \"npm run dev -w frontend\"",
-    "build": "npm run build --workspace frontend",
+    "build": "npm run build -w frontend",
     "prod": "npm run start -w backend",
-    "install-all": "npm install --workspace frontend && npm install --workspace backend"
+    "install-all": "npm install --prefix frontend && npm install --prefix backend"
   },
   "repository": {
     "type": "git",

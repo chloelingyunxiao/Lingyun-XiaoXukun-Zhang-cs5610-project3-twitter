@@ -1,0 +1,48 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007bff;
+  padding: 0.8rem 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  margin: 0 1rem;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #ffd700;
+}
+
+.navbar .logout-button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.navbar .logout-button:hover {
+  background-color: #cc0000;
+}
+
+.navbar .auth-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.navbar .home-link {
+  font-size: 1.2rem;
+}

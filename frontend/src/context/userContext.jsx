@@ -5,7 +5,7 @@ import axios from "axios";
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null); // user object
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [error, setError] = useState("");
 
@@ -13,15 +13,16 @@ const UserProvider = ({ children }) => {
     const checkLoggedIn = async () => {
       try {
         const response = await axios.get("/api/users/isLoggedIn");
-        if (response.data.username) {
-          setCurrentUser(response.data.username);
+        if (response.data.user) {
+          setCurrentUser(response.data.user);
         }
+        console.log("Current User is logged in:", response.data.user);
       } catch (e) {
         console.error("Error checking login status", e);
       }
     };
     checkLoggedIn();
-  }, []);
+  }, [isLoggedIn]);
 
   // return a boolean indicating whether the user is logged in
   const login = async (username, password) => {
@@ -35,7 +36,6 @@ const UserProvider = ({ children }) => {
         setError("");
         console.log("Login successful", response.data);
         setIsLoggedIn(true);
-
         return true;
       }
     } catch (e) {

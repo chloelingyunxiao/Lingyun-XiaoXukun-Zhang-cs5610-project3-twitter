@@ -1,4 +1,5 @@
-const Schema = require("mongoose").Schema;
+const { Schema } = require("mongoose");
+const userCollection = process.env.USER_COLLECTION || "userCollection";
 
 exports.UserSchema = new Schema(
   {
@@ -8,11 +9,11 @@ exports.UserSchema = new Schema(
     },
     nickname: {
       type: String,
-      require: true,
+      required: true,
     },
     password: {
       type: String,
-      require: true,
+      required: true,
     },
     avatar: {
       type: String,
@@ -20,5 +21,5 @@ exports.UserSchema = new Schema(
         "https://www.clevelanddentalhc.com/wp-content/uploads/2018/03/sample-avatar.jpg",
     },
   },
-  { collection: "userCollection2" }
+  { collection: userCollection }
 );

@@ -9,6 +9,8 @@ import LoginPage from "./LoginPage";
 import TalkTownPage from "./TalkTownPage";
 import RegisterPage from "./RegisterPage";
 import { UserProvider } from "./context/userContext";
+import UserProfile from "./UserProfilePage";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <RegisterPage />,
+  },
+  {
+    path: "/user/:username",
+    element: <UserProfile />,
   },
 ]);
 

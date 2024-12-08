@@ -1,5 +1,6 @@
 import React from "react";
 import "./style.css";
+import { Link } from "react-router-dom";
 
 const Post = ({ post }) => {
   if (!post) {
@@ -13,9 +14,9 @@ const Post = ({ post }) => {
         <div className="user-info">
           <div className="user-name">
             {post.nickname && <span className="nickname">{post.nickname}</span>}
-            {post.username && (
-              <span className="username"> @{post.username}</span>
-            )}
+            <Link to={`/user/${post.username}`} className="username">
+              @{post.username}
+            </Link>
             <div className="timestamp">{post.timeStamp}</div>
           </div>
         </div>
@@ -24,6 +25,7 @@ const Post = ({ post }) => {
       <div className="post-content">
         <p>{post.content}</p>
 
+        {/* Render media if available */}
         {post.media && post.media.type === "image" && (
           <img src={post.media.url} alt="Post Media" className="post-media" />
         )}

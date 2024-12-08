@@ -3,11 +3,10 @@ import Post from "../Post";
 
 const posts = [
   {
-    id: 1,
     avatar:
       "https://www.clevelanddentalhc.com/wp-content/uploads/2018/03/sample-avatar.jpg",
-    username: "User 1",
-    nickname: "usernickname_1", // nickname
+    username: "lx",
+    nickname: "lingyunHappy", // nickname
     timeStamp: "2021-01-01 12:00:00",
     content: "This is the body of post 1",
     media: {
@@ -16,7 +15,6 @@ const posts = [
     },
   },
   {
-    id: 2,
     avatar:
       "https://www.clevelanddentalhc.com/wp-content/uploads/2018/03/sample-avatar.jpg",
     username: "User 2",
@@ -29,7 +27,6 @@ const posts = [
     },
   },
   {
-    id: 3,
     avatar:
       "https://www.clevelanddentalhc.com/wp-content/uploads/2018/03/sample-avatar.jpg",
     username: "User 3",

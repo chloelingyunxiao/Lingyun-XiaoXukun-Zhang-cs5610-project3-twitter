@@ -6,9 +6,6 @@ import { UserContext } from "../context/userContext";
 
 const NavBar = () => {
   const { logout, isLoggedIn, currentUser } = useContext(UserContext);
-  const handleClickNickName = () => {
-    console.log("click");
-  };
 
   const handleLogout = async () => {
     await logout();

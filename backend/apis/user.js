@@ -24,12 +24,12 @@ router.post("/login", async function (req, res) {
   const password = req.body.password;
 
   try {
-    const createUserResponse = await UserModel.findUserByUsername(username);
+    const loginResponse = await UserModel.findUserByUsername(username);
 
-    console.log(createUserResponse);
-    console.log(createUserResponse.password);
+    console.log(loginResponse);
+    console.log(loginResponse.password);
     console.log(password);
-    if (createUserResponse.password !== password) {
+    if (loginResponse.password !== password) {
       return res.status(403).send("Invalid password");
     }
 
@@ -46,15 +46,19 @@ router.post("/login", async function (req, res) {
 router.post("/register", async function (req, res) {
   const username = req.body.username;
   const password = req.body.password;
+  const nickname = req.body.nickname;
+  const avatar = req.body.avatar; // undefined or a string
 
   try {
-    if (!username || !password) {
-      return res.status(409).send("Missing username or password");
+    if (!username || !password || !nickname) {
+      return res.status(409).send("Missing username, nickname or password");
     }
 
     const createUserResponse = await UserModel.createUser({
       username: username,
+      nickname: nickname,
       password: password,
+      avatar: avatar,
     });
 
     const token = jwt.sign(username, "HUNTERS_PASSWORD");

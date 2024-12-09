@@ -11,7 +11,7 @@ const TalkTownPage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("/api/post");
+        const response = await axios.get("/api/posts");
         setPosts(response.data);
         console.log("posts list: ", response.data);
       } catch (e) {

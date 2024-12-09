@@ -26,7 +26,7 @@ export const CreatePostPage = () => {
     };
 
     try {
-      const response = await axios.post("/api/post/newpost", newPost);
+      const response = await axios.post("/api/posts/newpost", newPost);
       console.log("Post created successfully:", response.data);
       navigate("/talktown");
     } catch (error) {

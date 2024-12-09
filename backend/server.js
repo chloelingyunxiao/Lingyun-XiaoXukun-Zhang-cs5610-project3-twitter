@@ -30,7 +30,7 @@ app.use(cookieParser());
 
 app.use("/api/pokemon/", pokemon);
 app.use("/api/users/", users);
-app.use("/api/post/", posts);
+app.use("/api/posts/", posts);
 
 let frontend_dir = path.join(__dirname, "..", "frontend", "dist");
 

@@ -15,8 +15,23 @@ function findPostsByUsername(username) {
   return PostModel.find({ username: username }).exec();
 }
 
+function findAllPosts() {
+  return PostModel.find().exec();
+}
+
+function findPostByPostId(postId) {
+  return PostModel.findOne({ _id: postId }).exec();
+}
+
+function deletePostById(postId) {
+  return PostModel.deleteOne({ _id: postId });
+}
+
 module.exports = {
   PostModel,
   createPost,
+  findAllPosts,
+  findPostByPostId,
   findPostsByUsername,
+  deletePostById,
 };

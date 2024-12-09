@@ -12,15 +12,17 @@ const {
 
 // Create: generate a new post
 router.post("/newpost", async function (req, res) {
-  const { username, postTime, content, media } = req.body;
+  const { username, postTime, content, media, nickname, avatar } = req.body;
 
   try {
-    if (!username || !postTime || !content) {
+    if (!username || !content) {
       return res.status(400).send("Missing username, posttime, or content");
     }
 
     const newPost = await createPost({
       username,
+      nickname,
+      avatar,
       postTime,
       content,
       media,

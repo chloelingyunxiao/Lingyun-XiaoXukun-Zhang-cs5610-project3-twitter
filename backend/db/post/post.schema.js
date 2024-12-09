@@ -7,6 +7,15 @@ exports.PostSchema = new Schema(
       type: String,
       required: true,
     },
+    nickname: {
+      type: String,
+      required: true,
+    },
+    avatar: {
+      type: String,
+      default:
+        "https://www.clevelanddentalhc.com/wp-content/uploads/2018/03/sample-avatar.jpg",
+    },
     postTime: {
       type: Date,
       required: true,

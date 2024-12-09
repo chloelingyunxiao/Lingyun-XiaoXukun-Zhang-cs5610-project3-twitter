@@ -17,7 +17,7 @@ const Post = ({ post }) => {
             <Link to={`/user/${post.username}`} className="username">
               @{post.username}
             </Link>
-            <div className="timestamp">{post.timeStamp}</div>
+            <div className="timestamp">{post.postTime}</div>
           </div>
         </div>
       </div>

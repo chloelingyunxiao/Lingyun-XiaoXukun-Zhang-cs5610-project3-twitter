@@ -32,7 +32,9 @@ const NavBar = () => {
           </>
         ) : (
           <>
-            <Link to="/login">Login</Link>
+            <Link to="/login" onClick={() => console.log("Link clicked")}>
+              Login
+            </Link>
             <Link to="/register">Sign up</Link>
           </>
         )}

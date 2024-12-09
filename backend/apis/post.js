@@ -10,7 +10,7 @@ const {
   deletePostById,
 } = require("../db/post/post.model");
 
-// Create: generate a new post (c)
+// Create: generate a new post
 router.post("/newpost", async function (req, res) {
   const { username, postTime, content, media } = req.body;
 
@@ -35,12 +35,16 @@ router.post("/newpost", async function (req, res) {
 // Read: get all posts of a specific user
 router.get("/:username", async function (req, res) {
   const username = req.params.username;
-  const posts = await findPostsByUsername(username);
-
-  if (!posts) {
-    return res.status(404).send("No posts found");
+  try {
+    const posts = await findPostsByUsername(username);
+    if (!posts) {
+      return res.status(404).send("No posts found");
+    }
+    res.send(posts); // response includes all posts
+  } catch (e) {
+    console.error("Error retrieving posts:", e);
+    res.status(500).send("Error retrieving posts");
   }
-  res.send(posts); // response includes all posts
 });
 
 // Read: get all posts by all users

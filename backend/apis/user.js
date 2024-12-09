@@ -3,19 +3,19 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 
 const UserModel = require("../db/user/user.model");
+const { findUserByUsername } = require("../db/user/user.model");
 
 const userDB = [];
 
 router.get("/", function (request, response) {
   response.send(userDB);
+  console.log("This is the userDB");
   console.log(userDB);
 });
 
 router.post("/", async function (request, response) {
   const body = request.body;
-
   const newUserResponse = await UserModel.createUser(body);
-
   response.send("Created new user!");
 });
 
@@ -24,12 +24,10 @@ router.post("/login", async function (req, res) {
   const password = req.body.password;
 
   try {
-    const createUserResponse = await UserModel.findUserByUsername(username);
+    const loginResponse = await UserModel.findUserByUsername(username);
 
-    console.log(createUserResponse);
-    console.log(createUserResponse.password);
-    console.log(password);
-    if (createUserResponse.password !== password) {
+    console.log("Login response:", loginResponse);
+    if (loginResponse.password !== password) {
       return res.status(403).send("Invalid password");
     }
 
@@ -46,15 +44,19 @@ router.post("/login", async function (req, res) {
 router.post("/register", async function (req, res) {
   const username = req.body.username;
   const password = req.body.password;
+  const nickname = req.body.nickname;
+  const avatar = req.body.avatar; // undefined or a string
 
   try {
-    if (!username || !password) {
-      return res.status(409).send("Missing username or password");
+    if (!username || !password || !nickname) {
+      return res.status(409).send("Missing username, nickname or password");
     }
 
     const createUserResponse = await UserModel.createUser({
       username: username,
+      nickname: nickname,
       password: password,
+      avatar: avatar,
     });
 
     const token = jwt.sign(username, "HUNTERS_PASSWORD");
@@ -67,23 +69,33 @@ router.post("/register", async function (req, res) {
   }
 });
 
+// Check if the user is logged in and return the user data
 router.get("/isLoggedIn", async function (req, res) {
   const username = req.cookies.username;
 
   if (!username) {
-    return res.send({ username: null });
+    return res.send({ user: null });
   }
+
   let decryptedUsername;
   try {
     decryptedUsername = jwt.verify(username, "HUNTERS_PASSWORD");
   } catch (e) {
-    return res.send({ username: null });
+    console.error("Error verifying token:", e);
+    return res.send({ user: null });
   }
 
-  if (!decryptedUsername) {
-    return res.send({ username: null });
-  } else {
-    return res.send({ username: decryptedUsername });
+  // Find the user in the database
+  try {
+    const user = await findUserByUsername(decryptedUsername);
+    if (!user) {
+      return res.send({ user: null });
+    }
+    console.log("Found user:", user);
+    return res.send({ user });
+  } catch (error) {
+    console.error("Error retrieving user:", error);
+    return res.status(500).send({ user: null });
   }
 });
 
@@ -100,7 +112,7 @@ router.get("/:username", async function (req, res) {
 
   const userData = await UserModel.findUserByUsername(username);
 
-  return res.send(userData);
+  return res.send(userData); // return user object
 });
 
 module.exports = router;

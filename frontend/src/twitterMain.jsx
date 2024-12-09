@@ -10,6 +10,7 @@ import TalkTownPage from "./TalkTownPage";
 import RegisterPage from "./RegisterPage";
 import { UserProvider } from "./context/userContext";
 import UserProfile from "./UserProfilePage";
+import { CreatePostPage } from "./CreatePostPage";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/user/:username",
     element: <UserProfile />,
+  },
+  {
+    path: "/createpost",
+    element: <CreatePostPage />,
   },
 ]);
 

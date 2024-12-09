@@ -8,6 +8,8 @@ const RegisterPage = () => {
   const { login, error } = useContext(UserContext);
   const [usernameInput, setUsernameInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
+  const [nicknameInput, setNicknameInput] = useState("");
+  const [avatarInput, setAvatarInput] = useState("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState("");
   const navigate = useNavigate();
 
@@ -22,8 +24,11 @@ const RegisterPage = () => {
     try {
       const response = await axios.post("/api/users/register", {
         username: usernameInput,
+        nickname: nicknameInput,
         password: passwordInput,
+        avatar: avatarInput || undefined,
       });
+      // If registration is successful, log the user in and redirect to the TalkTown page
       if (response.status === 200) {
         await login(usernameInput, passwordInput);
         navigate("/talktown");
@@ -48,6 +53,15 @@ const RegisterPage = () => {
             />
           </div>
           <div className="form-group">
+            <label>Nickname</label>
+            <input
+              type="text"
+              placeholder="Enter your nickname"
+              value={nicknameInput}
+              onChange={(e) => setNicknameInput(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
             <label>Password</label>
             <input
               type="password"
@@ -63,6 +77,15 @@ const RegisterPage = () => {
               placeholder="Re-enter your password"
               value={confirmPasswordInput}
               onChange={(e) => setConfirmPasswordInput(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Avatar URL</label>
+            <input
+              type="text"
+              placeholder="(Optional) If you want to add an avatar, enter the URL here"
+              value={avatarInput}
+              onChange={(e) => setAvatarInput(e.target.value)}
             />
           </div>
           {error && <p className="error-message">{error}</p>}{" "}

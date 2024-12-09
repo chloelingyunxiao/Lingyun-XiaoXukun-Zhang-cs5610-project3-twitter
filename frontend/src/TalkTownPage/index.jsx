@@ -1,62 +1,43 @@
+import { useEffect } from "react";
 import NavBar from "../NavBar";
 import Post from "../Post";
-
-const posts = [
-  {
-    id: 1,
-    avatar:
-      "https://www.clevelanddentalhc.com/wp-content/uploads/2018/03/sample-avatar.jpg",
-    username: "User 1",
-    nickname: "usernickname_1", // nickname
-    timeStamp: "2021-01-01 12:00:00",
-    content: "This is the body of post 1",
-    media: {
-      type: "image",
-      url: "https://example.com/image1.jpg",
-    },
-  },
-  {
-    id: 2,
-    avatar:
-      "https://www.clevelanddentalhc.com/wp-content/uploads/2018/03/sample-avatar.jpg",
-    username: "User 2",
-    nickname: "usernickname_2",
-    timeStamp: "2021-01-02 12:00:00",
-    content: "This is the body of post 2",
-    media: {
-      type: "video",
-      url: "https://example.com/video1.mp4",
-    },
-  },
-  {
-    id: 3,
-    avatar:
-      "https://www.clevelanddentalhc.com/wp-content/uploads/2018/03/sample-avatar.jpg",
-    username: "User 3",
-    nickname: "usernickname_3",
-    timeStamp: "2021-01-03 12:00:00",
-    content: "This is the body of post 3",
-    media: null,
-  },
-];
+import axios from "axios";
+import { useState } from "react";
 
 const TalkTownPage = () => {
-  const orderedPosts = posts.sort((post1, post2) => {
-    if (post1.timeStamp < post2.timeStamp) {
-      return 1;
-    } else if (post1.timeStamp > post2.timeStamp) {
-      return -1;
-    } else {
-      return 0;
-    }
-  });
+  const [posts, setPosts] = useState([]);
+
+  // fetch all posts from database when loading
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get("/api/post");
+        setPosts(response.data);
+        console.log("posts list: ", response.data);
+      } catch (e) {
+        console.error("Error fetching posts:", e);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
+  const orderedPosts = Array.isArray(posts)
+    ? posts.sort((post1, post2) => {
+        const time1 = new Date(post1.postTime).getTime();
+        const time2 = new Date(post2.postTime).getTime();
+        return time2 - time1;
+      })
+    : [];
 
   return (
     <div>
       <NavBar />
-      {orderedPosts.map((post, index) => (
-        <Post key={index} post={post} />
-      ))}
+      {orderedPosts.length > 0 ? (
+        orderedPosts.map((post, index) => <Post key={index} post={post} />)
+      ) : (
+        <p>No posts available</p>
+      )}
     </div>
   );
 };

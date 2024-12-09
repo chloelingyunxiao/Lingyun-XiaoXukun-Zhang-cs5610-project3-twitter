@@ -4,42 +4,6 @@ import Post from "../Post";
 import axios from "axios";
 import { useState } from "react";
 
-// const posts = [
-//   {
-//     avatar:
-//       "https://www.clevelanddentalhc.com/wp-content/uploads/2018/03/sample-avatar.jpg",
-//     username: "lx",
-//     nickname: "lingyunHappy", // nickname
-//     timeStamp: "2021-01-01 12:00:00",
-//     content: "This is the body of post 1",
-//     media: {
-//       type: "image",
-//       url: "https://example.com/image1.jpg",
-//     },
-//   },
-//   {
-//     avatar:
-//       "https://www.clevelanddentalhc.com/wp-content/uploads/2018/03/sample-avatar.jpg",
-//     username: "User 2",
-//     nickname: "usernickname_2",
-//     timeStamp: "2021-01-02 12:00:00",
-//     content: "This is the body of post 2",
-//     media: {
-//       type: "video",
-//       url: "https://example.com/video1.mp4",
-//     },
-//   },
-//   {
-//     avatar:
-//       "https://www.clevelanddentalhc.com/wp-content/uploads/2018/03/sample-avatar.jpg",
-//     username: "User 3",
-//     nickname: "usernickname_3",
-//     timeStamp: "2021-01-03 12:00:00",
-//     content: "This is the body of post 3",
-//     media: null,
-//   },
-// ];
-
 const TalkTownPage = () => {
   const [posts, setPosts] = useState([]);
 

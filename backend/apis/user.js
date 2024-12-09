@@ -112,7 +112,7 @@ router.get("/:username", async function (req, res) {
 
   const userData = await UserModel.findUserByUsername(username);
 
-  return res.send(userData);
+  return res.send(userData); // return user object
 });
 
 module.exports = router;

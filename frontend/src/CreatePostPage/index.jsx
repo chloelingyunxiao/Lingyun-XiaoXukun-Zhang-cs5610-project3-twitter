@@ -1,12 +1,13 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../context/userContext";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import "./style.css";
 
-export const CreatePostPage = () => {
+export const CreatePostPage = ({ isCreatePost }) => {
   const { currentUser } = useContext(UserContext);
   const navigate = useNavigate();
+  const { postId } = useParams();
 
   const username = currentUser.username;
   const nickname = currentUser.nickname;
@@ -14,6 +15,8 @@ export const CreatePostPage = () => {
 
   const [content, setContent] = useState("");
   const [media, setMedia] = useState(null);
+
+  // useEffect fetch post - pending update!
 
   const handleSubmitNewPost = async () => {
     const newPost = {
@@ -34,6 +37,31 @@ export const CreatePostPage = () => {
     }
   };
 
+  const handleUpdatePost = async () => {
+    console.log("The update postId is: ", postId);
+
+    const updatedPost = {
+      username: username,
+      nickname: nickname,
+      avatar: avatar,
+      postTime: Date.now(),
+      content: content,
+      media: media,
+    };
+
+    // update the original post and response including the updatedPost
+    try {
+      const response = await axios.put(
+        `/api/posts/update/${postId}`,
+        updatedPost
+      );
+      console.log("Post updated successfully!");
+      navigate(`/user/${username}`);
+    } catch (e) {
+      console.error("Error updating post:", e.response || e.message);
+    }
+  };
+
   return (
     <div className="create-post-container">
       <div className="user-info">
@@ -50,7 +78,11 @@ export const CreatePostPage = () => {
         placeholder="Enter your media URL"
         onChange={(e) => setMedia(e.target.value)}
       />
-      <button onClick={handleSubmitNewPost}>Submit Post</button>
+      {isCreatePost ? (
+        <button onClick={handleSubmitNewPost}>Submit Post</button>
+      ) : (
+        <button onClick={handleUpdatePost}>Update Post</button>
+      )}
     </div>
   );
 };

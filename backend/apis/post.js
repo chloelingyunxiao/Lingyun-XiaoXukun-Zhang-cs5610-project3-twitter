@@ -78,7 +78,7 @@ router.put("/update/:postId", async function (req, res) {
     res.status(200).send(updatedPost);
   } catch (error) {
     console.error("Error fetching post:", error);
-    res.status(500).send("Error fetching post");
+    res.status(500).send("Error fetching post!");
   }
 });
 

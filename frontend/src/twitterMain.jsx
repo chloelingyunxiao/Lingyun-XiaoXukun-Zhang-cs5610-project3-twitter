@@ -35,7 +35,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/createpost",
-    element: <CreatePostPage />,
+    element: <CreatePostPage isCreatePost={true} />,
+  },
+  {
+    path: "/updatepost/:postId",
+    element: <CreatePostPage isCreatePost={false} />,
   },
 ]);
 

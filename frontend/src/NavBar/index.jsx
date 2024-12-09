@@ -25,16 +25,16 @@ const NavBar = () => {
           <>
             <span className="username">{currentUser.username}</span>
             <img src={currentUser.avatar} alt="avatar" className="avatar" />
-            <button className="newpost-button">new post</button>
+            <Link to="/createpost" className="newpost-button">
+              New post
+            </Link>
             <button className="logout-button" onClick={handleLogout}>
               Log out
             </button>
           </>
         ) : (
           <>
-            <Link to="/login" onClick={() => console.log("Link clicked")}>
-              Login
-            </Link>
+            <Link to="/login">Login</Link>
             <Link to="/register">Sign up</Link>
           </>
         )}

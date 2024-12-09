@@ -32,7 +32,7 @@ const UserProvider = ({ children }) => {
         password,
       });
       if (response.status === 200) {
-        setCurrentUser(username);
+        setCurrentUser(response.data);
         setError("");
         console.log("Login successful", response.data);
         setIsLoggedIn(true);

@@ -20,6 +20,10 @@ exports.UserSchema = new Schema(
       default:
         "https://www.clevelanddentalhc.com/wp-content/uploads/2018/03/sample-avatar.jpg",
     },
+    timeStamp: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { collection: userCollection }
 );

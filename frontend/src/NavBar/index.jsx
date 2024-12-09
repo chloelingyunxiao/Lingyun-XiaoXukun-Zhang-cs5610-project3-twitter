@@ -25,6 +25,7 @@ const NavBar = () => {
           <>
             <span className="username">{currentUser.username}</span>
             <img src={currentUser.avatar} alt="avatar" className="avatar" />
+            <button className="newpost-button">new post</button>
             <button className="logout-button" onClick={handleLogout}>
               Log out
             </button>

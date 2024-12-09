@@ -15,9 +15,7 @@ router.get("/", function (request, response) {
 
 router.post("/", async function (request, response) {
   const body = request.body;
-
   const newUserResponse = await UserModel.createUser(body);
-
   response.send("Created new user!");
 });
 

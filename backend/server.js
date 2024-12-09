@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const helper = require("./apis/helper");
-const pokemon = require("./apis/pokemon");
 const users = require("./apis/user");
 const posts = require("./apis/post");
 const app = express();
@@ -28,7 +27,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use("/api/pokemon/", pokemon);
 app.use("/api/users/", users);
 app.use("/api/posts/", posts);
 

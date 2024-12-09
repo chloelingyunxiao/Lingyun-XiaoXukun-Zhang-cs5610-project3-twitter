@@ -2,7 +2,7 @@ import React from "react";
 import "./style.css";
 import { Link } from "react-router-dom";
 
-const Post = ({ post }) => {
+const Post = ({ post, isLoggedInUserNameMatchPostUserName }) => {
   if (!post) {
     return <div>Post not found</div>;
   }
@@ -24,7 +24,14 @@ const Post = ({ post }) => {
 
       <div className="post-content">
         <p>{post.content}</p>
-
+        {isLoggedInUserNameMatchPostUserName ? (
+          <div>
+            <button>update post</button>
+            <button className="delete-button">delete post</button>
+          </div>
+        ) : (
+          <div />
+        )}
         {/* Render media if available */}
         {post.media && post.media.type === "image" && (
           <img src={post.media.url} alt="Post Media" className="post-media" />

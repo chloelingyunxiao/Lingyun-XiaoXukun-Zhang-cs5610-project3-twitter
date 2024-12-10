@@ -82,6 +82,27 @@ router.put("/update/:postId", async function (req, res) {
   }
 });
 
+// Updatepage: fetch the original post content
+router.get("/get/:postId", async function (req, res) {
+  const postId = req.params.postId;
+  console.log(`Received postId: ${postId}`);
+
+  try {
+    const post = await findPostByPostId(postId);
+    if (!post) {
+      console.log(`The post with id: ${postId} cannot be found!`);
+      return res
+        .status(404)
+        .send(`The post with id: ${postId} cannot be found!`);
+    }
+    res.status(200).send(post);
+    console.log(post);
+  } catch (error) {
+    console.error("Error fetching post:", error);
+    res.status(500).send("Error fetching post!");
+  }
+});
+
 // Delete: delete a post
 router.delete("/delete/:postId", async function (req, res) {
   const postId = req.params.postId;

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/userContext";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router";
@@ -8,6 +8,7 @@ export const CreatePostPage = ({ isCreatePost }) => {
   const { currentUser } = useContext(UserContext);
   const navigate = useNavigate();
   const { postId } = useParams();
+  const [originalPost, setOriginalPost] = useState(null);
 
   const username = currentUser.username;
   const nickname = currentUser.nickname;
@@ -15,8 +16,6 @@ export const CreatePostPage = ({ isCreatePost }) => {
 
   const [content, setContent] = useState("");
   const [media, setMedia] = useState(null);
-
-  // useEffect fetch post - pending update!
 
   const handleSubmitNewPost = async () => {
     const newPost = {
@@ -62,6 +61,23 @@ export const CreatePostPage = ({ isCreatePost }) => {
     }
   };
 
+  useEffect(() => {
+    const fetchOriginalPost = async () => {
+      try {
+        const response = await axios.get(`/api/posts/get/${postId}`);
+        const fetchedPost = response.data;
+        console.log("Original Post is:", fetchedPost);
+        setOriginalPost(fetchedPost);
+      } catch (e) {
+        console.error("Error fetching original post:", e.response || e.message);
+      }
+    };
+
+    if (!isCreatePost && postId) {
+      fetchOriginalPost();
+    }
+  }, [postId, isCreatePost]);
+
   return (
     <div className="create-post-container">
       <div className="user-info">
@@ -69,6 +85,14 @@ export const CreatePostPage = ({ isCreatePost }) => {
         <div>{username}</div>
         <div>{nickname}</div>
       </div>
+      {isCreatePost ? (
+        <div></div>
+      ) : (
+        <div>
+          <div>original post content</div>
+          <div>{originalPost?.content}</div>
+        </div>
+      )}
       <textarea
         placeholder="Enter your post content"
         onChange={(e) => setContent(e.target.value)}

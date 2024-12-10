@@ -8,6 +8,10 @@ const Post = ({ post, isLoggedInUserNameMatchPostUserName }) => {
   }
   const postId = post._id;
 
+  // const handleClickDeletePostButton = (postId) => {
+
+  // }
+
   return (
     <div className="post">
       <div className="post-header">

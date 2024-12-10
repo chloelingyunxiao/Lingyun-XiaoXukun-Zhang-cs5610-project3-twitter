@@ -17,26 +17,26 @@ const UserProfile = () => {
     setIsLoggedInUsernameMatchCurrentSearchUser,
   ] = useState(false);
 
-  // Fetch user and posts
+  const fetchUserByUserName = async () => {
+    try {
+      const response = await axios.get(`/api/users/${username}`);
+      setCurrentSearchUser(response.data);
+    } catch (error) {
+      console.error("Error fetching user:", error.message);
+    }
+  };
+
+  const fetchPostsByUserName = async () => {
+    try {
+      const response = await axios.get(`/api/posts/${username}`);
+      setPostsByUsername(response.data);
+    } catch (error) {
+      console.error("Error fetching posts:", error.message);
+    }
+  };
+
+  // Fetch user and posts while loading
   useEffect(() => {
-    const fetchUserByUserName = async () => {
-      try {
-        const response = await axios.get(`/api/users/${username}`);
-        setCurrentSearchUser(response.data);
-      } catch (error) {
-        console.error("Error fetching user:", error.message);
-      }
-    };
-
-    const fetchPostsByUserName = async () => {
-      try {
-        const response = await axios.get(`/api/posts/${username}`);
-        setPostsByUsername(response.data);
-      } catch (error) {
-        console.error("Error fetching posts:", error.message);
-      }
-    };
-
     fetchUserByUserName();
     fetchPostsByUserName();
   }, [username]);
@@ -49,6 +49,20 @@ const UserProfile = () => {
       setIsLoggedInUsernameMatchCurrentSearchUser(false);
     }
   }, [currentSearchUser, loggedInUsername]);
+
+  const handleDeletePost = async (deletePostId) => {
+    try {
+      const response = await axios.delete(`/api/posts/delete/${deletePostId}`);
+      console.log("Post deleted successfully!", response.data);
+      // Delete success, re-fetch posts
+      fetchPostsByUserName();
+    } catch (e) {
+      console.error(
+        "The post can't be deleted!",
+        e.response?.data || e.message
+      );
+    }
+  };
 
   // Order posts by time using useMemo
   const orderedPosts = useMemo(() => {
@@ -84,13 +98,16 @@ const UserProfile = () => {
 
       <h2>User's Posts</h2>
       {orderedPosts.length > 0 ? (
-        orderedPosts.map((post, index) => (
+        orderedPosts.map((post) => (
           <Post
-            key={index}
+            key={post._id}
             post={post}
             isLoggedInUserNameMatchPostUserName={
               isLoggedInUsernameMatchCurrentSearchUser
             }
+            onDelete={() => {
+              handleDeletePost(post._id);
+            }}
           />
         ))
       ) : (

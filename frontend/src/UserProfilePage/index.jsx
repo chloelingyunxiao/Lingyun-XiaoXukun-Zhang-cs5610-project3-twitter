@@ -17,26 +17,26 @@ const UserProfile = () => {
     setIsLoggedInUsernameMatchCurrentSearchUser,
   ] = useState(false);
 
-  // Fetch user and posts
+  const fetchUserByUserName = async () => {
+    try {
+      const response = await axios.get(`/api/users/${username}`);
+      setCurrentSearchUser(response.data);
+    } catch (error) {
+      console.error("Error fetching user:", error.message);
+    }
+  };
+
+  const fetchPostsByUserName = async () => {
+    try {
+      const response = await axios.get(`/api/posts/${username}`);
+      setPostsByUsername(response.data);
+    } catch (error) {
+      console.error("Error fetching posts:", error.message);
+    }
+  };
+
+  // Fetch user and posts while loading
   useEffect(() => {
-    const fetchUserByUserName = async () => {
-      try {
-        const response = await axios.get(`/api/users/${username}`);
-        setCurrentSearchUser(response.data);
-      } catch (error) {
-        console.error("Error fetching user:", error.message);
-      }
-    };
-
-    const fetchPostsByUserName = async () => {
-      try {
-        const response = await axios.get(`/api/posts/${username}`);
-        setPostsByUsername(response.data);
-      } catch (error) {
-        console.error("Error fetching posts:", error.message);
-      }
-    };
-
     fetchUserByUserName();
     fetchPostsByUserName();
   }, [username]);

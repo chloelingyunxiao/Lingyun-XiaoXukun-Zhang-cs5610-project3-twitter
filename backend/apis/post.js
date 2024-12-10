@@ -109,7 +109,7 @@ router.delete("/delete/:postId", async function (req, res) {
   console.log("Received postId:", postId);
 
   try {
-    const post = findPostByPostId(postId);
+    const post = await findPostByPostId(postId);
     if (!post) {
       return res
         .status(404)

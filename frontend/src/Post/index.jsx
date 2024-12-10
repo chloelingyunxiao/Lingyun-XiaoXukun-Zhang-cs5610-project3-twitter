@@ -1,6 +1,7 @@
 import React from "react";
 import "./style.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Post = ({ post, isLoggedInUserNameMatchPostUserName }) => {
   if (!post) {
@@ -8,9 +9,17 @@ const Post = ({ post, isLoggedInUserNameMatchPostUserName }) => {
   }
   const postId = post._id;
 
-  // const handleClickDeletePostButton = (postId) => {
-
-  // }
+  const handleDeletePost = async () => {
+    try {
+      const response = await axios.delete(`/api/posts/delete/${postId}`);
+      console.log("Post deleted successfully!", response.data);
+    } catch (e) {
+      console.error(
+        "The post can't be deleted!",
+        e.response?.data || e.message
+      );
+    }
+  };
 
   return (
     <div className="post">
@@ -32,7 +41,9 @@ const Post = ({ post, isLoggedInUserNameMatchPostUserName }) => {
         {isLoggedInUserNameMatchPostUserName ? (
           <div>
             <Link to={`/updatepost/${postId}`}>Update this post</Link>
-            <button className="delete-button">delete post</button>
+            <button className="delete-button" onClick={handleDeletePost}>
+              delete post
+            </button>
           </div>
         ) : (
           <div />

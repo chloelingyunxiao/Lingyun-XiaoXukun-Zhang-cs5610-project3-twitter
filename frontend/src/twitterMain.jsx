@@ -10,7 +10,7 @@ import TalkTownPage from "./TalkTownPage";
 import RegisterPage from "./RegisterPage";
 import { UserProvider } from "./context/userContext";
 import UserProfile from "./UserProfilePage";
-import { CreatePostPage } from "./CreatePostPage";
+import { CreateOrUpdatePostPage } from "./CreateOrUpdatePostPage";
 
 const router = createBrowserRouter([
   {
@@ -35,11 +35,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/createpost",
-    element: <CreatePostPage isCreatePost={true} />,
+    element: <CreateOrUpdatePostPage isCreatePost={true} />,
   },
   {
     path: "/updatepost/:postId",
-    element: <CreatePostPage isCreatePost={false} />,
+    element: <CreateOrUpdatePostPage isCreatePost={false} />,
   },
 ]);
 

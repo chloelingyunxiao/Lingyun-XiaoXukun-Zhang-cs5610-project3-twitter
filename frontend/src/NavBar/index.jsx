@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./style.css";
 import { useContext } from "react";
@@ -14,6 +14,10 @@ const NavBar = () => {
     console.log("logout");
     navigate("/talktown");
   };
+
+  useEffect(() => {
+    console.log("is loggedin? from nav:", isLoggedIn);
+  }, []);
 
   return (
     <div className="navbar">

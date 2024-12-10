@@ -4,6 +4,18 @@ import Post from "../Post";
 import axios from "axios";
 import { useState } from "react";
 
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+};
+
 const TalkTownPage = () => {
   const [posts, setPosts] = useState([]);
 
@@ -30,20 +42,31 @@ const TalkTownPage = () => {
       })
     : [];
 
-  return (
-    <div>
-      <NavBar />
-      {orderedPosts.length > 0 ? (
-        orderedPosts.map((post) => (
-          <Post
-            key={post._id}
-            post={post}
-            isLoggedInUserNameMatchPostUserName={false} // on talktown page, the update and delete button will not be displayed
-          />
-        ))
-      ) : (
-        <p>No posts available</p>
-      )}
+    return (
+      <div className="page-container">
+        <NavBar />
+        <div className="content-wrapper">
+          {orderedPosts.length > 0 ? (
+            <div className="posts-list">
+              {orderedPosts.map((post) => (
+                <div className="post-card">
+                  <Post
+                    key={post._id}
+                    post={{
+                      ...post,
+                      postTime: formatDate(post.postTime)
+                    }}
+                    isLoggedInUserNameMatchPostUserName={false}
+                  />
+                </div>
+              ))}
+            </div>
+           ) : (
+          <div className="empty-state">
+            <p>There are no posts yet. Be the first to post! </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

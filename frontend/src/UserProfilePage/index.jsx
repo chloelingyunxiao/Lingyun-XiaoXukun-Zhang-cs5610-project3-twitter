@@ -3,7 +3,19 @@ import NavBar from "../NavBar";
 import axios from "axios";
 import { useContext, useEffect, useMemo, useState } from "react";
 import Post from "../Post";
+import "./style.css";
 import { UserContext } from "../context/userContext";
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleString('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
 
 const UserProfile = () => {
   const { username } = useParams();
@@ -76,21 +88,21 @@ const UserProfile = () => {
   }, [postsByUsername]);
 
   return (
-    <div>
+    <div className="profile-container">
       <NavBar />
-      <h1>User Profile</h1>
       {currentSearchUser ? (
-        <div>
-          <div>Username: {currentSearchUser.username}</div>
+        <div className="user-info-container">
+          <div className="username-text">
+            {currentSearchUser.username}
+          </div>
           <img
             src={currentSearchUser.avatar}
             alt="User Avatar"
-            style={{ width: "100px", borderRadius: "50%" }}
+            className="profile-avatar"
           />
           <div>Nickname: {currentSearchUser.nickname}</div>
           <div>
-            Registered On:{" "}
-            {new Date(currentSearchUser.timeStamp).toLocaleString()}
+            Registered On: {formatDate(currentSearchUser.timeStamp)}
           </div>
         </div>
       ) : (
@@ -98,22 +110,27 @@ const UserProfile = () => {
       )}
 
       <h2>User's Posts</h2>
-      {orderedPosts.length > 0 ? (
-        orderedPosts.map((post) => (
-          <Post
-            key={post._id}
-            post={post}
-            isLoggedInUserNameMatchPostUserName={
-              isLoggedInUsernameMatchCurrentSearchUser
-            }
-            onDelete={() => {
-              handleDeletePost(post._id);
-            }}
-          />
-        ))
-      ) : (
-        <p>No posts available</p>
-      )}
+      <div className="posts-container">
+        {orderedPosts.length > 0 ? (
+          orderedPosts.map((post) => (
+            <Post
+              key={post._id}
+              post={{
+                ...post,
+                postTime: formatDate(post.postTime)
+              }}
+              isLoggedInUserNameMatchPostUserName={
+                isLoggedInUsernameMatchCurrentSearchUser
+              }
+              onDelete={() => {
+                handleDeletePost(post._id);
+              }}
+            />
+          ))
+        ) : (
+          <p>No posts available</p>
+        )}
+      </div>
     </div>
   );
 };

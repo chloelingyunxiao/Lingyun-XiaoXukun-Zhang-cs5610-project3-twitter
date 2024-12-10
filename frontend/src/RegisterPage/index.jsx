@@ -11,6 +11,8 @@ const RegisterPage = () => {
   const [nicknameInput, setNicknameInput] = useState("");
   const [avatarInput, setAvatarInput] = useState("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState("");
+  const [descriptionInput, setDescriptionInput] = useState("");
+  const maxLength = 200;
   const navigate = useNavigate();
 
   const handleRegister = async (event) => {
@@ -21,12 +23,18 @@ const RegisterPage = () => {
       return;
     }
 
+    if (descriptionInput.length > maxLength) {
+      alert("Description cannot be longer than 200 characters");
+      return;
+    }
+
     try {
       const response = await axios.post("/api/users/register", {
         username: usernameInput,
         nickname: nicknameInput,
         password: passwordInput,
         avatar: avatarInput || undefined,
+        description: descriptionInput,
       });
       // If registration is successful, log the user in and redirect to the TalkTown page
       if (response.status === 200) {
@@ -78,6 +86,22 @@ const RegisterPage = () => {
               value={confirmPasswordInput}
               onChange={(e) => setConfirmPasswordInput(e.target.value)}
             />
+          </div>
+          <div className="form-group">
+            <label>Description</label>
+            <textarea
+              placeholder="(Optional) Add a brief description about yourself"
+              value={descriptionInput}
+              onChange={(e) => {
+                if (e.target.value.length <= maxLength) {
+                  setDescriptionInput(e.target.value);
+                }
+              }}
+              maxLength={maxLength}
+            />
+            <div className="char-count">
+              {descriptionInput.length}/{maxLength}
+            </div>
           </div>
           <div className="form-group">
             <label>Avatar URL</label>

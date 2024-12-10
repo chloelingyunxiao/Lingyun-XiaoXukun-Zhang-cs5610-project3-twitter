@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const UserModel = require("../db/user/user.model");
 const { findUserByUsername } = require("../db/user/user.model");
+const { updateUserDescription } = require("../db/user/user.model");
 
 const userDB = [];
 
@@ -46,6 +47,7 @@ router.post("/register", async function (req, res) {
   const password = req.body.password;
   const nickname = req.body.nickname;
   const avatar = req.body.avatar; // undefined or a string
+  const description = req.body.description;
 
   try {
     if (!username || !password || !nickname) {
@@ -57,6 +59,7 @@ router.post("/register", async function (req, res) {
       nickname: nickname,
       password: password,
       avatar: avatar,
+      description: description || "",
     });
 
     const token = jwt.sign(username, "HUNTERS_PASSWORD");
@@ -113,6 +116,28 @@ router.get("/:username", async function (req, res) {
   const userData = await UserModel.findUserByUsername(username);
 
   return res.send(userData); // return user object
+});
+
+// Update user description in userProfilePage
+router.put("/update/description", async function (req, res) {
+  const { username, description } = req.body;
+  
+  if (description && description.length > 200) {
+    return res.status(400).send("Description cannot be longer than 200 characters");
+  }
+  
+  try {
+    const updatedUser = await updateUserDescription(username, description);
+    if (!updatedUser) {
+      return res.status(404).send("User not found");
+    }
+    
+    console.log("Description updated successfully:", updatedUser);
+    return res.send(updatedUser);
+  } catch (error) {
+    console.error("Error updating description:", error);
+    return res.status(500).send("Error updating description");
+  }
 });
 
 module.exports = router;

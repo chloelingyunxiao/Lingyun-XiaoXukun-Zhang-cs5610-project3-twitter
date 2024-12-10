@@ -5,6 +5,32 @@ body {
   background-color: #f4f4f4;
 }
 
+textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.form-group textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  margin-bottom: 4px;
+}
+
+.char-count {
+  text-align: right;
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
 .signup-container {
   display: flex;
   justify-content: center;

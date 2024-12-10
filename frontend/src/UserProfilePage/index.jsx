@@ -29,6 +29,10 @@ const UserProfile = () => {
     setIsLoggedInUsernameMatchCurrentSearchUser,
   ] = useState(false);
 
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [descriptionInput, setDescriptionInput] = useState("");
+  const maxLength = 200;
+
   const fetchUserByUserName = async () => {
     try {
       const response = await axios.get(`/api/users/${username}`);
@@ -77,6 +81,19 @@ const UserProfile = () => {
     }
   };
 
+  const handleUpdateDescription = async () => {
+    try {
+      const response = await axios.put("/api/users/update/description", {
+        username: currentSearchUser.username,
+        description: descriptionInput
+      });
+      setCurrentSearchUser(response.data);
+      setIsEditingDescription(false);
+    } catch (error) {
+      console.error("Error updating description:", error);
+    }
+  };
+
   // Order posts by time using useMemo
   const orderedPosts = useMemo(() => {
     if (!Array.isArray(postsByUsername)) return [];
@@ -99,6 +116,44 @@ const UserProfile = () => {
             className="profile-avatar"
           />
           <div>{currentSearchUser.nickname}</div>
+          {currentSearchUser.description !== undefined && (
+            <div className="description-container">
+              {isEditingDescription && isLoggedInUsernameMatchCurrentSearchUser ? (
+                <div className="edit-description">
+                  <textarea
+                    value={descriptionInput}
+                    onChange={(e) => {
+                      if (e.target.value.length <= maxLength) {
+                        setDescriptionInput(e.target.value);}
+                      }}
+                    placeholder="Add a description about yourself"
+                    maxLength={maxLength}
+                  />
+                  <div className="description-info">
+                    <span className="char-count">
+                      {descriptionInput.length}/{maxLength}
+                    </span>
+                    <div className="description-buttons">
+                      <button onClick={handleUpdateDescription}>Save</button>
+                      <button onClick={() => setIsEditingDescription(false)}>Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="description-display" onClick={() => {
+                  if (isLoggedInUsernameMatchCurrentSearchUser) {
+                    setDescriptionInput(currentSearchUser.description);
+                    setIsEditingDescription(true);
+                  }
+                }}>
+                  {currentSearchUser.description || "Add a description"}
+                  {isLoggedInUsernameMatchCurrentSearchUser && (
+                    <span className="edit-hint">(Click to edit)</span>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
           <div>Registered On: {formatDate(currentSearchUser.timeStamp)}</div>
         </div>
       ) : (

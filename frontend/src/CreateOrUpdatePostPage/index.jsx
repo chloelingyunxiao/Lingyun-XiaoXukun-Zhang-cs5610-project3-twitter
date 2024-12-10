@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router";
 import "./style.css";
 
-export const CreatePostPage = ({ isCreatePost }) => {
+export const CreateOrUpdatePostPage = ({ isCreatePost }) => {
   const { currentUser } = useContext(UserContext);
   const navigate = useNavigate();
   const { postId } = useParams();

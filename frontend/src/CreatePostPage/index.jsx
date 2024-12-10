@@ -89,7 +89,7 @@ export const CreatePostPage = ({ isCreatePost }) => {
         <div></div>
       ) : (
         <div>
-          <div>original post content</div>
+          <div>Your previous post content</div>
           <div>{originalPost?.content}</div>
         </div>
       )}

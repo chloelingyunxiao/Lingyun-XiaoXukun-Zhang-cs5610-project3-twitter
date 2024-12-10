@@ -34,13 +34,13 @@ const TalkTownPage = () => {
     <div>
       <NavBar />
       {orderedPosts.length > 0 ? (
-        orderedPosts.map((post, index) => (
+        orderedPosts.map((post) => (
           <Post
-            key={index}
+            key={post._id}
             post={post}
-            isLoggedInUserNameMatchPostUserName={false}
+            isLoggedInUserNameMatchPostUserName={false} // on talktown page, the update and delete button will not be displayed
           />
-        )) // on talktown page, the update and delete button will not be displayed
+        ))
       ) : (
         <p>No posts available</p>
       )}

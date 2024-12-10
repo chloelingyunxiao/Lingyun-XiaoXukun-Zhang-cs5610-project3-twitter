@@ -1,7 +1,6 @@
 import React from "react";
 import "./style.css";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 const Post = ({ post, isLoggedInUserNameMatchPostUserName, onDelete }) => {
   if (!post) {

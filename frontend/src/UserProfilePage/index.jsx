@@ -8,7 +8,7 @@ import { UserContext } from "../context/userContext";
 const UserProfile = () => {
   const { username } = useParams();
   const { currentUser } = useContext(UserContext);
-  const loggedInUsername = currentUser.username;
+  const loggedInUsername = currentUser ? currentUser.username : null;
 
   const [currentSearchUser, setCurrentSearchUser] = useState(null);
   const [postsByUsername, setPostsByUsername] = useState([]);
@@ -20,6 +20,7 @@ const UserProfile = () => {
   const fetchUserByUserName = async () => {
     try {
       const response = await axios.get(`/api/users/${username}`);
+      console.log("successfully fetch user by url params username");
       setCurrentSearchUser(response.data);
     } catch (error) {
       console.error("Error fetching user:", error.message);

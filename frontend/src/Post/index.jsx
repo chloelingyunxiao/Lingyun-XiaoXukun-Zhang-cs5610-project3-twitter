@@ -19,8 +19,8 @@ const Post = ({ post, isLoggedInUserNameMatchPostUserName, onDelete }) => {
             <Link to={`/user/${post.username}`} className="username">
               @{post.username}
             </Link>
-            <div className="timestamp">{post.postTime}</div>
           </div>
+          <div className="timestamp">{post.postTime}</div>
         </div>
       </div>
 

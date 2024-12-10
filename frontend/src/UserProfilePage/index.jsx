@@ -8,19 +8,19 @@ import { UserContext } from "../context/userContext";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
-  return date.toLocaleString('en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 };
 
 const UserProfile = () => {
   const { username } = useParams();
   const { currentUser } = useContext(UserContext);
-  const loggedInUsername = currentUser.username;
+  const loggedInUsername = currentUser ? currentUser.username : null;
 
   const [currentSearchUser, setCurrentSearchUser] = useState(null);
   const [postsByUsername, setPostsByUsername] = useState([]);
@@ -32,6 +32,7 @@ const UserProfile = () => {
   const fetchUserByUserName = async () => {
     try {
       const response = await axios.get(`/api/users/${username}`);
+      console.log("successfully fetch user by url params username");
       setCurrentSearchUser(response.data);
     } catch (error) {
       console.error("Error fetching user:", error.message);
@@ -91,24 +92,19 @@ const UserProfile = () => {
       <NavBar />
       {currentSearchUser ? (
         <div className="user-info-container">
-          <div className="username-text">
-            {currentSearchUser.username}
-          </div>
+          <div className="username-text">{currentSearchUser.username}</div>
           <img
             src={currentSearchUser.avatar}
             alt="User Avatar"
             className="profile-avatar"
           />
-          <div>Nickname: {currentSearchUser.nickname}</div>
-          <div>
-            Registered On: {formatDate(currentSearchUser.timeStamp)}
-          </div>
+          <div>{currentSearchUser.nickname}</div>
+          <div>Registered On: {formatDate(currentSearchUser.timeStamp)}</div>
         </div>
       ) : (
         <div>Loading user profile...</div>
       )}
 
-      <h2>User's Posts</h2>
       <div className="posts-container">
         {orderedPosts.length > 0 ? (
           orderedPosts.map((post) => (
@@ -116,7 +112,7 @@ const UserProfile = () => {
               key={post._id}
               post={{
                 ...post,
-                postTime: formatDate(post.postTime)
+                postTime: formatDate(post.postTime),
               }}
               isLoggedInUserNameMatchPostUserName={
                 isLoggedInUsernameMatchCurrentSearchUser

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./style.css";
 import { useContext } from "react";
@@ -15,6 +15,10 @@ const NavBar = () => {
     navigate("/talktown");
   };
 
+  useEffect(() => {
+    console.log("is loggedin? from nav:", isLoggedIn);
+  }, []);
+
   return (
     <div className="navbar">
       <Link to="/talktown" className="home-link">
@@ -23,8 +27,10 @@ const NavBar = () => {
       <div className="auth-links">
         {isLoggedIn ? (
           <>
-            <span className="username">{currentUser.username}</span>
-            <img src={currentUser.avatar} alt="avatar" className="avatar" />
+            <div className="login-avatar-container">
+              <img src={currentUser.avatar} alt="avatar" className="avatar" />
+              <span className="login-username">{currentUser.username}</span>
+            </div>
             <Link to="/createpost" className="newpost-button">
               New post
             </Link>

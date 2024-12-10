@@ -48,10 +48,10 @@ const TalkTownPage = () => {
         <div className="content-wrapper">
           {orderedPosts.length > 0 ? (
             <div className="posts-list">
-              {orderedPosts.map((post, index) => (
-                <div key={index} className="post-card">
+              {orderedPosts.map((post) => (
+                <div className="post-card">
                   <Post
-                    key={index}
+                    key={post._id}
                     post={{
                       ...post,
                       postTime: formatDate(post.postTime)

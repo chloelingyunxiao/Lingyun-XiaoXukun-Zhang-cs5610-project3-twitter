@@ -14,3 +14,14 @@ CS5610 project3
 
 4. Render
    https://lingyun-xiaoxukun-zhang-cs5610-project3.onrender.com
+
+### local configuration
+
+1. install dependencies
+   `cd frontend`
+   `npm install`
+
+2. run front end and backend
+   `cd ..` go to the root folder
+   `npm run build-front-and-run-end`
+   `open -na 'Google Chrome' --args --incognito http://localhost:5001` open chrome

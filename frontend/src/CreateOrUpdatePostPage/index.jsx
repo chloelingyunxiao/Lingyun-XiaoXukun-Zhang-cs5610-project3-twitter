@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router";
 import "./style.css";
 
-export const CreatePostPage = ({ isCreatePost }) => {
+export const CreateOrUpdatePostPage = ({ isCreatePost }) => {
   const { currentUser } = useContext(UserContext);
   const navigate = useNavigate();
   const { postId } = useParams();
@@ -89,7 +89,7 @@ export const CreatePostPage = ({ isCreatePost }) => {
         <div></div>
       ) : (
         <div>
-          <div>original post content</div>
+          <div>Your previous post content</div>
           <div>{originalPost?.content}</div>
         </div>
       )}

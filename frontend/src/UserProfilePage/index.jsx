@@ -50,6 +50,20 @@ const UserProfile = () => {
     }
   }, [currentSearchUser, loggedInUsername]);
 
+  const handleDeletePost = async (deletePostId) => {
+    try {
+      const response = await axios.delete(`/api/posts/delete/${deletePostId}`);
+      console.log("Post deleted successfully!", response.data);
+      // Delete success, re-fetch posts
+      fetchPostsByUserName();
+    } catch (e) {
+      console.error(
+        "The post can't be deleted!",
+        e.response?.data || e.message
+      );
+    }
+  };
+
   // Order posts by time using useMemo
   const orderedPosts = useMemo(() => {
     if (!Array.isArray(postsByUsername)) return [];
@@ -84,13 +98,16 @@ const UserProfile = () => {
 
       <h2>User's Posts</h2>
       {orderedPosts.length > 0 ? (
-        orderedPosts.map((post, index) => (
+        orderedPosts.map((post) => (
           <Post
-            key={index}
+            key={post._id}
             post={post}
             isLoggedInUserNameMatchPostUserName={
               isLoggedInUsernameMatchCurrentSearchUser
             }
+            onDelete={() => {
+              handleDeletePost(post._id);
+            }}
           />
         ))
       ) : (

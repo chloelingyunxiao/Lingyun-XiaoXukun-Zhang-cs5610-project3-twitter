@@ -6,6 +6,11 @@ const Post = ({ post, isLoggedInUserNameMatchPostUserName }) => {
   if (!post) {
     return <div>Post not found</div>;
   }
+  const postId = post._id;
+
+  // const handleClickDeletePostButton = (postId) => {
+
+  // }
 
   return (
     <div className="post">
@@ -26,7 +31,7 @@ const Post = ({ post, isLoggedInUserNameMatchPostUserName }) => {
         <p>{post.content}</p>
         {isLoggedInUserNameMatchPostUserName ? (
           <div>
-            <button>update post</button>
+            <Link to={`/updatepost/${postId}`}>Update this post</Link>
             <button className="delete-button">delete post</button>
           </div>
         ) : (

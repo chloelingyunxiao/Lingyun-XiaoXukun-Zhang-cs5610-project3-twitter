@@ -15,6 +15,9 @@ const UserProvider = ({ children }) => {
         const response = await axios.get("/api/users/isLoggedIn");
         if (response.data.user) {
           setCurrentUser(response.data.user);
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
         }
         console.log("Current User is logged in:", response.data.user);
       } catch (e) {

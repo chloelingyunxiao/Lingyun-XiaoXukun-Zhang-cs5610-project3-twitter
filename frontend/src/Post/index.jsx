@@ -36,16 +36,6 @@ const Post = ({ post, isLoggedInUserNameMatchPostUserName, onDelete }) => {
         ) : (
           <div />
         )}
-        {/* Render media if available */}
-        {post.media && post.media.type === "image" && (
-          <img src={post.media.url} alt="Post Media" className="post-media" />
-        )}
-        {post.media && post.media.type === "video" && (
-          <video controls className="post-media">
-            <source src={post.media.url} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        )}
       </div>
     </div>
   );

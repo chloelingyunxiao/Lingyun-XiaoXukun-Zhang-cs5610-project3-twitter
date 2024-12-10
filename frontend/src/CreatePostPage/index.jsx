@@ -97,11 +97,6 @@ export const CreatePostPage = ({ isCreatePost }) => {
         placeholder="Enter your post content"
         onChange={(e) => setContent(e.target.value)}
       />
-      <input
-        type="text"
-        placeholder="Enter your media URL"
-        onChange={(e) => setMedia(e.target.value)}
-      />
       {isCreatePost ? (
         <button onClick={handleSubmitNewPost}>Submit Post</button>
       ) : (

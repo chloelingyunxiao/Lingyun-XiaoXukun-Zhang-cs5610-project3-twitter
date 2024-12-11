@@ -34,6 +34,9 @@ const NavBar = () => {
             <Link to="/createpost" className="newpost-button">
               New post
             </Link>
+            <Link to="/settings" className="settings-button"> 
+              Settings
+            </Link>
             <button className="logout-button" onClick={handleLogout}>
               Log out
             </button>

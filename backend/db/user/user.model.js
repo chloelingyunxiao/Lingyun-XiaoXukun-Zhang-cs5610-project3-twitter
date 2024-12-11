@@ -22,9 +22,28 @@ function updateUserDescription(username, description) {
   ).exec();
 }
 
+function findAllUsers() {
+  return UserModel.find().exec();
+}
+
+function updatePassword(username, newPassword) {
+  return UserModel.findOneAndUpdate(
+    { username },
+    { password: newPassword },
+    { new: true }
+  ).exec();
+}
+
+function deleteUserByUsername(username) {
+  return UserModel.findOneAndDelete({ username: username }).exec();
+}
+
 module.exports = {
   UserModel,
   createUser,
   findUserByUsername,
   updateUserDescription,
+  updatePassword,
+  deleteUserByUsername,
+  findAllUsers,
 };

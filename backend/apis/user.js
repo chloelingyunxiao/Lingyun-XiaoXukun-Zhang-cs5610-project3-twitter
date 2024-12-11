@@ -188,6 +188,7 @@ router.delete("/delete/:username", async function (req, res) {
     // Delete all posts from this user
     console.log("Deleting posts for user:", username);
     await deletePostsByUsername(username);
+
     // Delete this user account
     console.log("Deleting user account:", username);
     const deletedUser = await deleteUserByUsername(username);

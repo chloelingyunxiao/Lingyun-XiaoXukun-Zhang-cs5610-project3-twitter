@@ -24,6 +24,7 @@ exports.PostSchema = new Schema(
     content: {
       type: String,
       required: true,
+      maxlength: [280, 'Post cannot be longer than 280 characters'] 
     },
     media: {
       type: {

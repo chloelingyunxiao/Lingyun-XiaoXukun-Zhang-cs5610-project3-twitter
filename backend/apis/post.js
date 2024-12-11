@@ -20,6 +20,10 @@ router.post("/newpost", async function (req, res) {
       return res.status(400).send("Missing username, posttime, or content");
     }
 
+    if (content.length > 280) {
+      return res.status(400).send("Post content cannot exceed 280 characters");
+    }
+
     const newPost = await createPost({
       username,
       nickname,
@@ -66,6 +70,11 @@ router.put("/update/:postId", async function (req, res) {
   const { content, media, postTime } = req.body;
 
   try {
+    // Check content length
+    if (content && content.length > 280) {
+      return res.status(400).send("Post content cannot exceed 280 characters");
+    }
+
     const post = await findPostByPostId(postId);
     if (!post) {
       return res

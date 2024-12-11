@@ -28,7 +28,13 @@ const NavBar = () => {
         {isLoggedIn ? (
           <>
             <div className="login-avatar-container">
-              <img src={currentUser.avatar} alt="avatar" className="avatar" />
+              <Link to={`/user/${currentUser.username}`}>
+                <img 
+                  src={currentUser.avatar} 
+                  alt="avatar" 
+                  className="avatar" 
+                />
+              </Link>
               <span className="login-username">{currentUser.username}</span>
             </div>
             <Link to="/createpost" className="newpost-button">

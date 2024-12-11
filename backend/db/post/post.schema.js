@@ -27,15 +27,9 @@ exports.PostSchema = new Schema(
       maxlength: [280, 'Post cannot be longer than 280 characters'] 
     },
     media: {
-      type: {
-        type: String,
-        enum: ["image", "video"],
-        required: false,
-      },
-      url: {
-        type: String,
-      },
-    },
+      data: String,
+      contentType: String
+    }
   },
   { collection: postCollection }
 );

@@ -25,6 +25,11 @@ const Post = ({ post, isLoggedInUserNameMatchPostUserName, onDelete }) => {
 
       <div className="post-content">
         <p>{post.content}</p>
+        {post.media && post.media.data && (
+          <div className="post-media">
+            <img src={post.media.data} alt="Post media" className="post-image"/>
+          </div>
+        )}
         {isLoggedInUserNameMatchPostUserName ? (
           <div>
             <Link to={`/updatepost/${postId}`}>Update this post</Link>

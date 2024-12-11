@@ -9,6 +9,8 @@ export const CreateOrUpdatePostPage = ({ isCreatePost }) => {
   const navigate = useNavigate();
   const { postId } = useParams();
   const [originalPost, setOriginalPost] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
 
   const username = currentUser.username;
   const nickname = currentUser.nickname;
@@ -18,22 +20,63 @@ export const CreateOrUpdatePostPage = ({ isCreatePost }) => {
   const maxLength = 280;
   const [media, setMedia] = useState(null);
 
-  const handleSubmitNewPost = async () => {
-    if (!content.trim()) {
-      alert("Please enter some content");
-      return;
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        alert("File size should be less than 5MB");
+        return;
+      }
+      setImageFile(file);
+      // Create a preview URL for the image
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
     }
+  };
 
-    const newPost = {
-      username: username,
-      nickname: nickname,
-      avatar: avatar,
-      postTime: Date.now(),
-      content: content,
-      media: media,
-    };
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+  };
 
+  const handleSubmitNewPost = async () => {
     try {
+      if (!content.trim()) {
+        alert("Please enter some content");
+        return;
+      }
+
+      let media = null;
+      if (imageFile) {
+        const base64 = await convertToBase64(imageFile);
+        media = {
+          data: base64,
+          contentType: imageFile.type
+        };
+        console.log("Prepared media:", { contentType: imageFile.type });
+      }
+
+      const newPost = {
+        username: username,
+        nickname: nickname,
+        avatar: avatar,
+        postTime: Date.now(),
+        content: content,
+        media
+      };
+
+      console.log("Submitting new post with media:", 
+        { ...newPost, media: media ? { contentType: media.contentType } : null }
+      );
       const response = await axios.post("/api/posts/newpost", newPost);
       console.log("Post created successfully:", response.data);
       navigate("/talktown");
@@ -43,17 +86,28 @@ export const CreateOrUpdatePostPage = ({ isCreatePost }) => {
   };
 
   const handleUpdatePost = async () => {
-    const updatedPost = {
-      username: username,
-      nickname: nickname,
-      avatar: avatar,
-      postTime: Date.now(),
-      content: content,
-      media: media,
-    };
-
     // update the original post and response including the updatedPost
     try {
+      let media = originalPost.media; 
+      if (imageFile) {
+        const base64 = await convertToBase64(imageFile);
+        media = {
+          data: base64,
+          contentType: imageFile.type
+        };
+      } else if (imagePreview === null) {
+        media = null;
+      }
+      
+      const updatedPost = {
+        username: username,
+        nickname: nickname,
+        avatar: avatar,
+        postTime: Date.now(),
+        content: content,
+        media: media,
+      };
+  
       const response = await axios.put(
         `/api/posts/update/${postId}`,
         updatedPost
@@ -86,8 +140,12 @@ export const CreateOrUpdatePostPage = ({ isCreatePost }) => {
       try {
         const response = await axios.get(`/api/posts/get/${postId}`);
         const fetchedPost = response.data;
+        if (fetchedPost.media && fetchedPost.media.data) {
+          setImagePreview(fetchedPost.media.data);
+        }
         console.log("Original Post is:", fetchedPost);
         setContent(fetchedPost.content); // Set it into text box directly
+        setOriginalPost(fetchedPost);
       } catch (e) {
         console.error("Error fetching original post:", e.response || e.message);
       }
@@ -122,6 +180,27 @@ export const CreateOrUpdatePostPage = ({ isCreatePost }) => {
         <div className="char-count">
           {content.length}/{maxLength}
         </div>
+      </div>
+
+      <div className="media-upload">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          id="image-upload"
+          className="hidden"
+        />
+        <label htmlFor="image-upload" className="upload-button">
+          Add Image
+        </label>
+        {imagePreview && (
+          <div className="image-preview">
+            <img src={imagePreview} alt="Preview" />
+            <button onClick={handleRemoveImage} className="remove-image">
+              Remove Image
+            </button>
+          </div>
+        )}
       </div>
       
       <div className="button-group">

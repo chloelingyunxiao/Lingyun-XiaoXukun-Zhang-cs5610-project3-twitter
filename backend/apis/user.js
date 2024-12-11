@@ -2,16 +2,24 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 
+
 const UserModel = require("../db/user/user.model");
 const { findUserByUsername } = require("../db/user/user.model");
 const { updateUserDescription } = require("../db/user/user.model");
+const { updatePassword } = require("../db/user/user.model");
+const { findAllUsers } = require("../db/user/user.model");
+const { deleteUserByUsername } = require("../db/user/user.model");
+const { deletePostsByUsername } = require("../db/post/post.model");
 
-const userDB = [];
-
-router.get("/", function (request, response) {
-  response.send(userDB);
-  console.log("This is the userDB");
-  console.log(userDB);
+router.get("/", async function (request, response) {
+  try {
+    const allUsers = await findAllUsers();
+    response.send(allUsers);
+    console.log("All users:", allUsers);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    response.status(500).send("Error fetching users");
+  }
 });
 
 router.post("/", async function (request, response) {
@@ -137,6 +145,62 @@ router.put("/update/description", async function (req, res) {
   } catch (error) {
     console.error("Error updating description:", error);
     return res.status(500).send("Error updating description");
+  }
+});
+
+// Change user password
+router.put("/change-password", async function (req, res) {
+  const { username, currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await findUserByUsername(username);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    if (user.password !== currentPassword) {
+      return res.status(403).send("Current password is incorrect");
+    }
+
+    const updatedUser = await updatePassword(username, newPassword);
+    
+    if (!updatedUser) {
+      return res.status(404).send("Failed to update password");
+    }
+
+    console.log("Password updated successfully");
+    return res.send("Password updated successfully");
+  } catch (error) {
+    console.error("Error updating password:", error);
+    return res.status(500).send("Error updating password");
+  }
+});
+
+// Delete account
+router.delete("/delete/:username", async function (req, res) {
+  const { username } = req.params;
+  try {
+    const user = await findUserByUsername(username);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    // Delete all posts from this user
+    console.log("Deleting posts for user:", username);
+    await deletePostsByUsername(username);
+    // Delete this user account
+    console.log("Deleting user account:", username);
+    const deletedUser = await deleteUserByUsername(username);
+    if (!deletedUser) {
+      return res.status(404).send("Failed to delete user");
+    }
+    // cleanup cookie
+    res.cookie("username", "", { maxAge: 0,});
+    console.log("Account deleted successfully");
+    return res.send("Account and all associated posts deleted successfully");
+  } catch (error) {
+    console.error("Error deleting account:", error);
+    return res.status(500).send(`Error deleting account: ${error.message}`);
   }
 });
 

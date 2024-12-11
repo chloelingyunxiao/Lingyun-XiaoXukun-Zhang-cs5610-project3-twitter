@@ -8,6 +8,7 @@ const {
   findAllPosts,
   findPostByPostId,
   deletePostById,
+  deletePostsByUsername
 } = require("../db/post/post.model");
 
 // Create: generate a new post
@@ -120,6 +121,20 @@ router.delete("/delete/:postId", async function (req, res) {
   } catch (e) {
     console.error("Error deleting post:", e);
     res.status(500).send("Error deleting post");
+  }
+});
+
+// Delete all posts from a username
+router.delete("/deleteByUsername/:username", async function (req, res) {
+  const { username } = req.params;
+  console.log("Deleting all posts for username:", username);
+
+  try {
+    await deletePostsByUsername(username);
+    res.status(200).send("All posts for user deleted successfully!");
+  } catch (e) {
+    console.error("Error deleting posts:", e);
+    res.status(500).send("Error deleting posts");
   }
 });
 

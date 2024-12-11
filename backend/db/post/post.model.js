@@ -27,6 +27,10 @@ function deletePostById(postId) {
   return PostModel.deleteOne({ _id: postId });
 }
 
+function deletePostsByUsername(username) {
+  return PostModel.deleteMany({ username: username }).exec();
+}
+
 module.exports = {
   PostModel,
   createPost,
@@ -34,4 +38,5 @@ module.exports = {
   findPostByPostId,
   findPostsByUsername,
   deletePostById,
+  deletePostsByUsername,
 };

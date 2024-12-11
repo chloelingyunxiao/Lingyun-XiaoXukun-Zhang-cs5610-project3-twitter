@@ -11,6 +11,7 @@ import RegisterPage from "./RegisterPage";
 import { UserProvider } from "./context/userContext";
 import UserProfile from "./UserProfilePage";
 import { CreateOrUpdatePostPage } from "./CreateOrUpdatePostPage";
+import SettingsPage from "./SettingsPage";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: "/updatepost/:postId",
     element: <CreateOrUpdatePostPage isCreatePost={false} />,
+  },
+  {
+    path: "/settings",
+    element: <SettingsPage />,
   },
 ]);
 

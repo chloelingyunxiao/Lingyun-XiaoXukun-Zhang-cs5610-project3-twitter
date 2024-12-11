@@ -82,7 +82,7 @@ router.put("/update/:postId", async function (req, res) {
         .send("The post with id: ", postId, " can not be found!");
     }
     if (content) post.content = content;
-    if (media) post.media = media;
+    if (media !== undefined) post.media = media;
     post.postTime = postTime; // update the post time as the update time
     const updatedPost = await post.save();
     res.status(200).send(updatedPost);

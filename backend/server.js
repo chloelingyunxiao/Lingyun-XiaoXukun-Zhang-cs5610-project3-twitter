@@ -9,6 +9,9 @@ const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 
+app.use(express.json({limit: '5mb'}));
+app.use(express.urlencoded({limit: '5mb', extended: true}));
+
 console.log(process.env.MONGODB_URI);
 
 console.log("Connecting to MongoDB...");

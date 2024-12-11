@@ -120,6 +120,46 @@ button:hover {
   color: #dc2626;
 }
 
+.media-upload {
+  margin: 16px 0;
+}
+
+.upload-button {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.upload-button:hover {
+  background-color: #e5e7eb;
+}
+
+.image-preview {
+  margin-top: 16px;
+  position: relative;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 100px;
+  border-radius: 8px;
+}
+
+.remove-image {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
 @media (max-width: 640px) {
   .create-post-container {
     margin: 20px;

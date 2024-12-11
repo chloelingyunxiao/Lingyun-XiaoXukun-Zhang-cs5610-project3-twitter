@@ -5,8 +5,7 @@ import axios from "axios";
 import "./style.css";
 
 const LoginPage = () => {
-  const { login, error } = useContext(UserContext);
-  const { isLoggedIn } = useContext(UserContext);
+  const { login, error, setError } = useContext(UserContext);
   const [usernameInput, setUsernameInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const navigate = useNavigate();
@@ -23,8 +22,8 @@ const LoginPage = () => {
         navigate("/talktown");
       }
     } catch (e) {
-      console.log(e);
-      alert("Login failed. Please check your credentials.");
+      console.error("Login error:", e);
+      setError("Login failed. Please check your credentials.");
     }
   };
 

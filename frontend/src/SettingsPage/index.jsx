@@ -36,6 +36,12 @@ const SettingsPage = () => {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmNewPassword('');
+
+      setTimeout(async () => {
+        await logout();
+        alert('Password changed successfully. Please log in with your new password.');
+        navigate('/talktown');
+      }, 3000);
     } catch (error) {
       setError('Failed to change password. Please check your current password.');
     }
@@ -94,6 +100,12 @@ const SettingsPage = () => {
               Change Password
             </button>
           </form>
+          {error && <div className="error-message">{error}</div>}
+          {message && (
+            <div className="success-message">
+              {message}
+            </div>
+          )}
         </section>
 
         <section className="settings-section danger-zone">

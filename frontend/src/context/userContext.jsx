@@ -34,15 +34,16 @@ const UserProvider = ({ children }) => {
         username,
         password,
       });
-      if (response.status === 200) {
-        setCurrentUser(response.data);
-        setError("");
-        console.log("Login successful", response.data);
+  
+      if (response.data.user) {
+        setCurrentUser(response.data.user);
         setIsLoggedIn(true);
+        setError("");
         return true;
       }
     } catch (e) {
       setError("Login failed");
+      setIsLoggedIn(false);
       return false;
     }
   };
@@ -52,6 +53,7 @@ const UserProvider = ({ children }) => {
       await axios.post("/api/users/logOut");
       setCurrentUser(null);
       setIsLoggedIn(false);
+      setError("");
     } catch (e) {
       console.error("Error during logout", e);
     }
@@ -59,7 +61,7 @@ const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ currentUser, login, logout, error, isLoggedIn }}
+      value={{ currentUser, login, logout, error, isLoggedIn, setError }}
     >
       {children}
     </UserContext.Provider>

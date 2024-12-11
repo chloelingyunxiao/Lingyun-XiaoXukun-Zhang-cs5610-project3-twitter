@@ -6,8 +6,16 @@ const userCollection = process.env.USER_COLLECTION || "userCollection";
 
 const UserModel = mongoose.model("UserModel", UserSchema, userCollection);
 
-function createUser(user) {
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
+async function createUser(user) {
   return UserModel.create(user);
+}
+
+// Add password comparison function
+async function comparePassword(plainPassword, hashedPassword) {
+  return bcrypt.compare(plainPassword, hashedPassword);
 }
 
 function findUserByUsername(username) {
@@ -41,6 +49,7 @@ function deleteUserByUsername(username) {
 module.exports = {
   UserModel,
   createUser,
+  comparePassword,
   findUserByUsername,
   updateUserDescription,
   updatePassword,

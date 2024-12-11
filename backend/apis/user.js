@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const UserModel = require("../db/user/user.model");
 const { findUserByUsername } = require("../db/user/user.model");
@@ -10,6 +12,7 @@ const { updatePassword } = require("../db/user/user.model");
 const { findAllUsers } = require("../db/user/user.model");
 const { deleteUserByUsername } = require("../db/user/user.model");
 const { deletePostsByUsername } = require("../db/post/post.model");
+const { comparePassword } = require("../db/user/user.model");
 
 router.get("/", async function (request, response) {
   try {
@@ -29,24 +32,39 @@ router.post("/", async function (request, response) {
 });
 
 router.post("/login", async function (req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
+  const { username, password } = req.body;
 
   try {
-    const loginResponse = await UserModel.findUserByUsername(username);
+    const user = await findUserByUsername(username);
+    if (!user) {
+      return res.status(401).json({ 
+        message: "User not found" 
+      });
+    }
 
-    console.log("Login response:", loginResponse);
-    if (loginResponse.password !== password) {
-      return res.status(403).send("Invalid password");
+    // Compare password with hashed password
+    const isPasswordValid = await comparePassword(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(403).json({ 
+        message: "Invalid password" 
+      });
     }
 
     const token = jwt.sign(username, "HUNTERS_PASSWORD");
 
     res.cookie("username", token);
-
-    return res.send("User known and logged in");
+    
+    const userWithoutPassword = { ...user._doc };
+    delete userWithoutPassword.password;
+    
+    return res.status(200).json({
+      message: "Login successful",
+      user: userWithoutPassword
+    });
   } catch (e) {
-    res.status(401).send(null);
+    return res.status(500).json({ 
+      message: "Internal server error" 
+    });
   }
 });
 
@@ -62,10 +80,12 @@ router.post("/register", async function (req, res) {
       return res.status(409).send("Missing username, nickname or password");
     }
 
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const createUserResponse = await UserModel.createUser({
       username: username,
       nickname: nickname,
-      password: password,
+      password: hashedPassword,
       avatar: avatar,
       description: description || "",
     });
@@ -158,11 +178,14 @@ router.put("/change-password", async function (req, res) {
       return res.status(404).send("User not found");
     }
 
-    if (user.password !== currentPassword) {
+    // Verify current hashed password
+    const isPasswordValid = await comparePassword(currentPassword, user.password);
+    if (!isPasswordValid) {
       return res.status(403).send("Current password is incorrect");
     }
-
-    const updatedUser = await updatePassword(username, newPassword);
+    // Hash new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+    const updatedUser = await updatePassword(username, hashedNewPassword);
     
     if (!updatedUser) {
       return res.status(404).send("Failed to update password");

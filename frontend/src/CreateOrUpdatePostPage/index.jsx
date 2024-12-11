@@ -15,9 +15,15 @@ export const CreateOrUpdatePostPage = ({ isCreatePost }) => {
   const avatar = currentUser.avatar;
 
   const [content, setContent] = useState("");
+  const maxLength = 280;
   const [media, setMedia] = useState(null);
 
   const handleSubmitNewPost = async () => {
+    if (!content.trim()) {
+      alert("Please enter some content");
+      return;
+    }
+
     const newPost = {
       username: username,
       nickname: nickname,
@@ -37,8 +43,6 @@ export const CreateOrUpdatePostPage = ({ isCreatePost }) => {
   };
 
   const handleUpdatePost = async () => {
-    console.log("The update postId is: ", postId);
-
     const updatedPost = {
       username: username,
       nickname: nickname,
@@ -61,13 +65,29 @@ export const CreateOrUpdatePostPage = ({ isCreatePost }) => {
     }
   };
 
+  const handleCancel = () => {
+    const confirmMessage = isCreatePost 
+      ? "Are you sure you want to cancel creating this post?" 
+      : "Are you sure you want to cancel editing this post?";
+    
+    if (content.trim() && !window.confirm(confirmMessage)) {
+      return;
+    }
+    
+    if (!isCreatePost) {
+      navigate(`/user/${username}`);
+    } else {
+      navigate("/talktown");
+    }
+  };
+
   useEffect(() => {
     const fetchOriginalPost = async () => {
       try {
         const response = await axios.get(`/api/posts/get/${postId}`);
         const fetchedPost = response.data;
         console.log("Original Post is:", fetchedPost);
-        setOriginalPost(fetchedPost);
+        setContent(fetchedPost.content); // Set it into text box directly
       } catch (e) {
         console.error("Error fetching original post:", e.response || e.message);
       }
@@ -80,28 +100,45 @@ export const CreateOrUpdatePostPage = ({ isCreatePost }) => {
 
   return (
     <div className="create-post-container">
+      <h2>{isCreatePost ? "Create New Post" : "Edit Post"}</h2>
       <div className="user-info">
         <img src={avatar} alt="User Avatar" className="user-avatar" />
-        <div>{username}</div>
-        <div>{nickname}</div>
-      </div>
-      {isCreatePost ? (
-        <div></div>
-      ) : (
-        <div>
-          <div>Your previous post content</div>
-          <div>{originalPost?.content}</div>
+        <div className="user-details">
+          <div className="username">{username}</div>
+          <div className="nickname">{nickname}</div>
         </div>
-      )}
-      <textarea
-        placeholder="Enter your post content"
-        onChange={(e) => setContent(e.target.value)}
-      />
-      {isCreatePost ? (
-        <button onClick={handleSubmitNewPost}>Submit Post</button>
-      ) : (
-        <button onClick={handleUpdatePost}>Update Post</button>
-      )}
+      </div>
+      <div className="content-input">
+        <textarea
+          value={content}
+          onChange={(e) => {
+            if (e.target.value.length <= maxLength) {
+              setContent(e.target.value);
+            }
+          }}
+          maxLength={maxLength}
+          placeholder="What's happening?"
+        />
+        <div className="char-count">
+          {content.length}/{maxLength}
+        </div>
+      </div>
+      
+      <div className="button-group">
+        <button 
+          className="cancel-button" 
+          onClick={handleCancel}
+        >
+          Cancel
+        </button>
+        <button 
+          className="submit-button"
+          onClick={isCreatePost ? handleSubmitNewPost : handleUpdatePost}
+          disabled={!content.trim()}
+        >
+          {isCreatePost ? "Post" : "Save Changes"}
+        </button>
+      </div>
     </div>
   );
 };

@@ -5,6 +5,13 @@ body {
   padding: 0;
 }
 
+h2 {
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
 .create-post-container {
   max-width: 600px;
   margin: 50px auto;
@@ -14,20 +21,11 @@ body {
   border-radius: 16px;
 }
 
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #f0f2f5;
-}
-
 .user-avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 2px solid #f0f2f5;
+  object-fit: cover;
 }
 
 .user-info div {
@@ -56,6 +54,33 @@ textarea:focus {
   border-color: #2563eb;
 }
 
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancel-button, 
+.submit-button {
+  padding: 8px 24px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.cancel-button {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.submit-button {
+  background-color: #2563eb;
+  color: white;
+}
+
 button {
   background-color: #2563eb;
   color: white;
@@ -72,6 +97,27 @@ button {
 
 button:hover {
   background-color: #1d4ed8;
+}
+
+.content-input {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.char-count {
+  position: absolute;
+  bottom: 13px;
+  right: 8px;
+  color: #536471;
+  font-size: 13px;
+}
+
+.char-count.near-limit {
+  color: #ffa000;
+}
+
+.char-count.at-limit {
+  color: #dc2626;
 }
 
 @media (max-width: 640px) {
